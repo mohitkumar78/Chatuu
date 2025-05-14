@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { keyframes } from "@emotion/react";
 import { CameraAlt } from "@mui/icons-material";
-
+import { VisuallyHiddenInput } from "../component/Styles/Styledcomponent";
 // Animation keyframes
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -108,17 +108,32 @@ function Login() {
                     margin: "auto",
                   }}
                 />
-                <IconButton
-                  sx={{
+                <label
+                  htmlFor="profile-pic-upload"
+                  style={{
                     position: "absolute",
                     bottom: 0,
                     right: "25%",
                     backgroundColor: "#2ea043",
-                    "&:hover": { backgroundColor: "#238636" },
+                    borderRadius: "50%",
+                    padding: "8px",
+                    cursor: "pointer",
                   }}
                 >
                   <CameraAlt sx={{ color: "white" }} />
-                </IconButton>
+                  <VisuallyHiddenInput
+                    type="file"
+                    id="profile-pic-upload"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        console.log("Selected file:", file);
+                        // Optional: Handle preview or upload here
+                      }
+                    }}
+                  />
+                </label>
               </Stack>
             )}
 
