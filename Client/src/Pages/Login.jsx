@@ -13,7 +13,10 @@ import {
 import { keyframes } from "@emotion/react";
 import { CameraAlt } from "@mui/icons-material";
 import { VisuallyHiddenInput } from "../component/Styles/Styledcomponent";
+import { useInputValidation, useStrongPassword, useFileHandler } from "6pp";
+import { usernamevalidator } from "../Utils/Validators";
 // Animation keyframes
+
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -22,7 +25,11 @@ const fadeIn = keyframes`
 function Login() {
   const [isLogin, setLogin] = useState(true);
   const toggleLogin = () => setLogin((prev) => !prev);
-
+  const name = useInputValidation("");
+  const bio = useInputValidation("");
+  const username = useInputValidation("", usernamevalidator);
+  const password = useStrongPassword();
+  const avtar = useFileHandler("single");
   return (
     <Box
       sx={{
@@ -107,6 +114,7 @@ function Login() {
                     height: "10rem",
                     margin: "auto",
                   }}
+                  src={avtar.preview}
                 />
                 <label
                   htmlFor="profile-pic-upload"
@@ -125,13 +133,7 @@ function Login() {
                     type="file"
                     id="profile-pic-upload"
                     accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        console.log("Selected file:", file);
-                        // Optional: Handle preview or upload here
-                      }
-                    }}
+                    onChange={avtar.changeHandler}
                   />
                 </label>
               </Stack>
@@ -150,10 +152,12 @@ function Login() {
               {!isLogin && (
                 <>
                   <TextField
-                    label="Full Name"
+                    label="Name"
                     variant="filled"
                     fullWidth
                     margin="normal"
+                    value={name.value}
+                    onChange={name.changeHandler}
                     InputProps={{ style: { color: "#fff" } }}
                     InputLabelProps={{ style: { color: "#8b949e" } }}
                   />
@@ -162,6 +166,8 @@ function Login() {
                     variant="filled"
                     fullWidth
                     margin="normal"
+                    value={bio.value}
+                    onChange={bio.changeHandler}
                     InputProps={{ style: { color: "#fff" } }}
                     InputLabelProps={{ style: { color: "#8b949e" } }}
                   />
@@ -172,15 +178,24 @@ function Login() {
                 variant="filled"
                 fullWidth
                 margin="normal"
+                value={username.value}
+                onChange={username.changeHandler}
                 InputProps={{ style: { color: "#fff" } }}
                 InputLabelProps={{ style: { color: "#8b949e" } }}
               />
+              {username.error && (
+                <Typography variant="caption" color="error">
+                  {username.error}
+                </Typography>
+              )}
               <TextField
                 label="Password"
                 type="password"
                 variant="filled"
                 fullWidth
                 margin="normal"
+                value={password.value}
+                onChange={password.changeHandler}
                 InputProps={{ style: { color: "#fff" } }}
                 InputLabelProps={{ style: { color: "#8b949e" } }}
               />
